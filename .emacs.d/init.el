@@ -22,7 +22,8 @@
 ;; Flymake error navigation in Scala buffers
 (with-eval-after-load 'scala-mode
   (define-key scala-mode-map (kbd "M-n") 'flymake-goto-next-error)
-  (define-key scala-mode-map (kbd "M-p") 'flymake-goto-prev-error))
+  (define-key scala-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+  (define-key scala-mode-map (kbd "C-c a") 'eglot-code-actions))
 
 ;; Cross-platform system clipboard integration for terminal Emacs
 ;; M-w / C-y = Emacs kill ring (internal, with history)
