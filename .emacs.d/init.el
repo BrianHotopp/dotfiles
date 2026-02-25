@@ -19,6 +19,11 @@
   (add-to-list 'eglot-server-programs
                '(scala-mode . ("metals-launcher"))))
 
+;; Flymake error navigation in Scala buffers
+(with-eval-after-load 'scala-mode
+  (define-key scala-mode-map (kbd "M-n") 'flymake-goto-next-error)
+  (define-key scala-mode-map (kbd "M-p") 'flymake-goto-prev-error))
+
 ;; Cross-platform system clipboard integration for terminal Emacs
 ;; M-w / C-y = Emacs kill ring (internal, with history)
 ;; C-c w / C-c y = System clipboard (shares with browser, etc.)
