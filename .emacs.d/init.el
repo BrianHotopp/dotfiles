@@ -26,31 +26,53 @@
   (define-key scala-mode-map (kbd "C-c a") 'eglot-code-actions))
 
 ;; Cross-platform system clipboard integration for terminal Emacs
+;; Fallback chain: pbcopy → wl-copy → xclip → xsel (same as tmux config)
 ;; M-w / C-y = Emacs kill ring (internal, with history)
 ;; C-c w / C-c y = System clipboard (shares with browser, etc.)
+;; C-c W = Copy current buffer filename to system clipboard
+(defun my/clipboard-copy-cmd ()
+  "Return the best available clipboard copy command."
+  (cond
+   ((executable-find "pbcopy") "pbcopy")
+   ((executable-find "wl-copy") "wl-copy")
+   ((executable-find "xclip") "xclip -selection clipboard -in")
+   ((executable-find "xsel") "xsel --clipboard --input")))
+
+(defun my/clipboard-paste-cmd ()
+  "Return the best available clipboard paste command."
+  (cond
+   ((executable-find "pbpaste") "pbpaste")
+   ((executable-find "wl-paste") "wl-paste")
+   ((executable-find "xclip") "xclip -selection clipboard -out")
+   ((executable-find "xsel") "xsel --clipboard --output")))
+
 (defun my/copy-to-clipboard ()
-  "Copy region to system clipboard (works on macOS and Linux)"
+  "Copy region to system clipboard."
   (interactive)
   (when (region-active-p)
-    (let ((clipboard-cmd
-           (cond
-            ((eq system-type 'darwin) "pbcopy")
-            ((eq system-type 'gnu/linux) "xclip -selection clipboard"))))
-      (shell-command-on-region (region-beginning) (region-end) clipboard-cmd)
-      (message "Copied to system clipboard")
-      (deactivate-mark))))
+    (shell-command-on-region (region-beginning) (region-end) (my/clipboard-copy-cmd))
+    (message "Copied to system clipboard")
+    (deactivate-mark)))
 
 (defun my/paste-from-clipboard ()
-  "Paste from system clipboard (works on macOS and Linux)"
+  "Paste from system clipboard."
   (interactive)
-  (let ((clipboard-cmd
-         (cond
-          ((eq system-type 'darwin) "pbpaste")
-          ((eq system-type 'gnu/linux) "xclip -selection clipboard -o"))))
-    (insert (shell-command-to-string clipboard-cmd))))
+  (insert (shell-command-to-string (my/clipboard-paste-cmd))))
+
+(defun my/copy-filename-to-clipboard ()
+  "Copy the current buffer's filename to the system clipboard."
+  (interactive)
+  (if-let ((name (buffer-file-name)))
+      (progn
+        (with-temp-buffer
+          (insert name)
+          (shell-command-on-region (point-min) (point-max) (my/clipboard-copy-cmd)))
+        (message "Copied: %s" name))
+    (message "Buffer has no file")))
 
 (global-set-key (kbd "C-c w") 'my/copy-to-clipboard)
 (global-set-key (kbd "C-c y") 'my/paste-from-clipboard)
+(global-set-key (kbd "C-c W") 'my/copy-filename-to-clipboard)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
