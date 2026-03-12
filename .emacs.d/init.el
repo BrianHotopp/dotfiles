@@ -9,15 +9,17 @@
 ;; Fuzzy matching in minibuffer (file finder, M-x, etc.)
 (fido-vertical-mode 1)
 
+;; Auto-revert buffers when files change on disk (e.g. after git operations)
+(global-auto-revert-mode 1)
+
 ;; Scala setup
 (require 'scala-mode)
 (add-hook 'scala-mode-hook 'eglot-ensure)
 (require 'sbt-mode)
 
-;; Use metals-launcher for Scala LSP (reads .metals-version from project root)
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
-               '(scala-mode . ("metals-launcher"))))
+               '(scala-mode . ("metals"))))
 
 ;; Flymake error navigation in Scala buffers
 (with-eval-after-load 'scala-mode
