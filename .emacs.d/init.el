@@ -19,7 +19,9 @@
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
-               '(scala-mode . ("metals"))))
+               '(scala-mode . ("metals" :initializationOptions
+                                (:buildTool "sbt"
+                                 :bloopSbtAlreadyInstalled t)))))
 
 ;; Flymake error navigation in Scala buffers
 (with-eval-after-load 'scala-mode
@@ -75,6 +77,10 @@
 (global-set-key (kbd "C-c w") 'my/copy-to-clipboard)
 (global-set-key (kbd "C-c y") 'my/paste-from-clipboard)
 (global-set-key (kbd "C-c W") 'my/copy-filename-to-clipboard)
+
+;; Use ripgrep for project-find-regexp when available, else default grep
+(when (executable-find "rg")
+  (setq xref-search-program 'ripgrep))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
