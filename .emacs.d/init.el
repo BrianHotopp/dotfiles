@@ -20,8 +20,7 @@
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
                '(scala-mode . ("metals" :initializationOptions
-                                (:buildTool "sbt"
-                                 :bloopSbtAlreadyInstalled t)))))
+                                (:defaultBspToBuildTool t)))))
 
 ;; Flymake error navigation in Scala buffers
 (with-eval-after-load 'scala-mode
