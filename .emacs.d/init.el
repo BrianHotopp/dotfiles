@@ -1,3 +1,5 @@
+;;; init.el --- Emacs configuration -*- lexical-binding: t; -*-
+
 ;; Package setup
 (require 'package)
 (add-to-list 'package-archives
@@ -11,6 +13,9 @@
 
 ;; Auto-revert buffers when files change on disk (e.g. after git operations)
 (global-auto-revert-mode 1)
+
+;; Render ANSI color codes in compilation buffers (e.g. sbt output)
+(add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
 ;; Scala setup
 (require 'scala-mode)
