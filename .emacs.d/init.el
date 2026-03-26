@@ -22,6 +22,12 @@
                '(scala-mode . ("metals" :initializationOptions
                                 (:defaultBspToBuildTool t)))))
 
+;; jarchive: open files inside JARs via M-. (xref-find-definitions).
+;; Without this, eglot passes jar:file: URIs through to find-file-noselect,
+;; which has no handler and mangles them into bogus local paths.
+(require 'jarchive)
+(jarchive-mode 1)
+
 ;; Flymake error navigation in Scala buffers
 (with-eval-after-load 'scala-mode
   (define-key scala-mode-map (kbd "M-n") 'flymake-goto-next-error)
@@ -86,7 +92,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(sbt-mode scala-mode cmake-mode)))
+ '(package-selected-packages '(jarchive sbt-mode scala-mode cmake-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
