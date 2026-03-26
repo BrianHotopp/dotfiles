@@ -25,6 +25,9 @@
 ;; jarchive: open files inside JARs via M-. (xref-find-definitions).
 ;; Without this, eglot passes jar:file: URIs through to find-file-noselect,
 ;; which has no handler and mangles them into bogus local paths.
+(unless (package-installed-p 'jarchive)
+  (package-refresh-contents)
+  (package-install 'jarchive))
 (require 'jarchive)
 (jarchive-mode 1)
 
