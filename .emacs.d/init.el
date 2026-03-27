@@ -14,6 +14,9 @@
 ;; Auto-revert buffers when files change on disk (e.g. after git operations)
 (global-auto-revert-mode 1)
 
+;; Keep backup files out of project directories
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+
 ;; Render ANSI color codes in compilation buffers (e.g. sbt output)
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
