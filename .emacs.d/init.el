@@ -40,7 +40,8 @@
 (with-eval-after-load 'scala-mode
   (define-key scala-mode-map (kbd "M-n") 'flymake-goto-next-error)
   (define-key scala-mode-map (kbd "M-p") 'flymake-goto-prev-error)
-  (define-key scala-mode-map (kbd "C-c a") 'eglot-code-actions))
+  (define-key scala-mode-map (kbd "C-c a") 'eglot-code-actions)
+  (define-key scala-mode-map (kbd "C-c i") 'eglot-find-implementation))
 
 ;; Cross-platform system clipboard integration for terminal Emacs
 ;; Fallback chain: pbcopy → wl-copy → xclip → xsel (same as tmux config)
